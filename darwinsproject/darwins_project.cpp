@@ -177,6 +177,21 @@ int main(int argc, char* argv[])
 
 
 
+void push(int nb_pixel, int world_height, int world_width, std::vector<std::vector<Cell>>& world, int x, int y, Type elem ,int zoom) {
+
+	for (int i = 0; i < nb_pixel; i++)
+	{
+		while (world[x][y].type != EMPTY)
+		{
+			x = rand() % world_height;
+			y = rand() % world_width;
+		}
+
+		world[x][y] = Cell(elem);
+		show_cell(x, y, elem, zoom, nullptr);
+	}
+
+}
 
 // Initialise le monde
 
@@ -194,39 +209,10 @@ void initialize_world(std::vector<std::vector<Cell>>& world, int world_width, in
 	for (int i = 0; i < world_height; i++)
 		world.push_back(temp);
 
-	for (int i = 0; i < nb_PLANTs; i++)
-	{
-		while (world[x][y].type != EMPTY)
-		{
-			x = rand() % world_height;
-			y = rand() % world_width;
-		}
 
-		world[x][y] = Cell(PLANT);
-		show_cell(x, y, PLANT, zoom, nullptr);
-	}
+	push(nb_PLANTs, world_height, world_width, world, x, y, PLANT, zoom);
+	push(nb_PREYs, world_height, world_width, world, x, y, PREY, zoom);
+	push(nb_predators, world_height, world_width, world, x, y, PREDATOR, zoom);
 
-	for (int i = 0; i < nb_PREYs; i++)
-	{
-		while (world[x][y].type != EMPTY)
-		{
-			x = rand() % world_height;
-			y = rand() % world_width;
-		}
 
-		world[x][y] = Cell(PREY);
-		show_cell(x, y, PREY, zoom, nullptr);
-	}
-
-	for (int i = 0; i < nb_predators; i++)
-	{
-		while (world[x][y].type != EMPTY)
-		{
-			x = rand() % world_height;
-			y = rand() % world_width;
-		}
-
-		world[x][y] = Cell(PREDATOR);
-		show_cell(x, y, PREDATOR, zoom, nullptr);
-	}
 }
