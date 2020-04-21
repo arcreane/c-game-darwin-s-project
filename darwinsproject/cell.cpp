@@ -1,13 +1,13 @@
 #include "cell.h"
 #include "display.h"
-
+#include <vector>
 
 
 // Crée une case
 
 Cell::Cell()
 {
-	type = empty;
+	type = EMPTY;
 	done = false;
 	nb_eat = 0;
 	time_no_eat = 0;
@@ -51,101 +51,48 @@ void Cell::operator=(const Cell& cell)
 
 
 
-// Initialise le monde
 
-void initialize_world(std::vector<std::vector<Cell>>& world, int world_width, int world_height, int nb_plants, int nb_preys, int nb_predators, int zoom)
+
+// Rajoute des cases de type PLANTe autour des PLANTes déjà existantes
+
+void Cell::grow_PLANT(std::vector<std::vector<Cell>>& world, int x, int y, int growth_rate, int zoom)
 {
-	world.clear();
-	std::vector<Cell> temp;
-
-	int x = rand() % world_height;
-	int y = rand() % world_width;
-
-	for (int i = 0; i < world_width; i++)
-		temp.push_back(Cell());
-
-	for (int i = 0; i < world_height; i++)
-		world.push_back(temp);
-
-	for (int i = 0; i < nb_plants; i++)
-	{
-		while (world[x][y].type != empty)
-		{
-			x = rand() % world_height;
-			y = rand() % world_width;
-		}
-
-		world[x][y] = Cell(plant);
-		show_cell(x, y, plant, zoom);
-	}
-
-	for (int i = 0; i < nb_preys; i++)
-	{
-		while (world[x][y].type != empty)
-		{
-			x = rand() % world_height;
-			y = rand() % world_width;
-		}
-
-		world[x][y] = Cell(prey);
-		show_cell(x, y, plant, zoom);
-	}
-
-	for (int i = 0; i < nb_predators; i++)
-	{
-		while (world[x][y].type != empty)
-		{
-			x = rand() % world_height;
-			y = rand() % world_width;
-		}
-
-		world[x][y] = Cell(predator);
-		show_cell(x, y, plant, zoom);
-	}
-}
-
-
-
-// Rajoute des cases de type plante autour des plantes déjà existantes
-
-void grow_plant(std::vector<std::vector<Cell>>& world, int x, int y, int growth_rate, int zoom)
-{
-	Cell cell = Cell(plant);
+	Cell cell = Cell(PLANT);
 	cell.done = true;
 
-	if (x > 0 and world[x - 1][y].type == plant and !world[x - 1][y].done)
+	if (x > 0 and world[x - 1][y].type == PLANT and !world[x - 1][y].done)
 	{
 		if (rand() % 100 < growth_rate)
 		{
 			world[x][y] = cell;
-			show_cell(x, y, plant, zoom);
+			show_cell(x, y, PLANT, zoom, this);
 		}
 	}
 
-	if (y > 0 and world[x][y - 1].type == plant and !world[x][y - 1].done)
+	if (y > 0 and world[x][y - 1].type == PLANT and !world[x][y - 1].done)
 	{
 		if (rand() % 100 < growth_rate)
 		{
 			world[x][y] = cell;
-			show_cell(x, y, plant, zoom);
+			show_cell(x, y, PLANT, zoom, this);
 		}
 	}
 
-	if (y < world.front().size() - 1 and world[x][y + 1].type == plant and !world[x][y + 1].done)
+	if (y < world.front().size() - 1 and world[x][y + 1].type == PLANT and !world[x][y + 1].done)
 	{
 		if (rand() % 100 < growth_rate)
 		{
 			world[x][y] = cell;
-			show_cell(x, y, plant, zoom);
+			show_cell(x, y, PLANT, zoom, this);
 		}
 	}
 
-	if (x < world.size() - 1 and world[x + 1][y].type == plant and !world[x + 1][y].done)
+	if (x < world.size() - 1 and world[x + 1][y].type == PLANT and !world[x + 1][y].done)
 	{
 		if (rand() % 100 < growth_rate)
 		{
 			world[x][y] = cell;
-			show_cell(x, y, plant, zoom);
+			show_cell(x, y, PLANT, zoom, this);
 		}
 	}
 }
@@ -154,7 +101,7 @@ void grow_plant(std::vector<std::vector<Cell>>& world, int x, int y, int growth_
 
 // Enlève la sécurité qui empèche de prendre en compte plusieurs fois le même être vivant
 
-void update_world(std::vector<std::vector<Cell>>& world)
+void Cell::update_world(std::vector<std::vector<Cell>>& world)
 {
 	for (int i = 0; i < world.size(); i++)
 	{
@@ -170,7 +117,7 @@ void update_world(std::vector<std::vector<Cell>>& world)
 
 // Donne 1 si la valeur est positive et -1 si la valeur est négative
 
-int sign(int value)
+int Cell::sign(int value)
 {
 	if (value >= 0)
 		return 1;
@@ -183,9 +130,9 @@ int sign(int value)
 
 // Indique si on peut se déplacer sur cette case
 
-int is_walkable(Type type)
+int Cell::is_walkable(Type type)
 {
-	return (type == empty or type == plant);
+	return (type == EMPTY or type == PLANT);
 }
 
 

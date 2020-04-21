@@ -1,3 +1,4 @@
+#include "cell.h"
 #include "display.h"
 #include "SDL.h"
 
@@ -5,19 +6,21 @@
 
 // Affiche un rectangle aux coordonnées voulues
 
-void show_cell(int x, int y, const Type type, int zoom)
+void show_cell(int x, int y, const Type type, int zoom, Cell* c)
 {
-	if (type == plant)
-		SDL_SetRenderDrawColor(renderer, PLANT.red, PLANT.green, PLANT.blue, SDL_ALPHA_OPAQUE);
+	if (c == nullptr)
+		c = new Cell();
+	if (type == PLANT)
+		SDL_SetRenderDrawColor(renderer, c->getColor().red, c->getColor().green, c->getColor().blue, SDL_ALPHA_OPAQUE);
 
-	else if (type == prey)
-		SDL_SetRenderDrawColor(renderer, PREY.red, PREY.green, PREY.blue, SDL_ALPHA_OPAQUE);
+	else if (type == PREY)
+		SDL_SetRenderDrawColor(renderer, c->getColor().red, c->getColor().green, c->getColor().blue, SDL_ALPHA_OPAQUE);
 
-	else if (type == predator)
-		SDL_SetRenderDrawColor(renderer, PREDATOR.red, PREDATOR.green, PREDATOR.blue, SDL_ALPHA_OPAQUE);
+	else if (type == PREDATOR)
+		SDL_SetRenderDrawColor(renderer, c->getColor().red, c->getColor().green, c->getColor().blue, SDL_ALPHA_OPAQUE);
 
 	else
-		SDL_SetRenderDrawColor(renderer, BACKGROUND.red, BACKGROUND.green, BACKGROUND.blue, SDL_ALPHA_OPAQUE);
+		SDL_SetRenderDrawColor(renderer, c->getColor().red, c->getColor().green, c->getColor().blue, SDL_ALPHA_OPAQUE);
 
 	SDL_Rect rectangle[1];
 
