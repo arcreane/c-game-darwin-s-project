@@ -1,9 +1,0 @@
-﻿  cell.cpp
-  darwins_project.cpp
-C:\Users\luzzi\Desktop\TRAVAIL\C++Projects\Nouveau dossier\c-game-darwin-s-project\darwinsproject\darwins_project.cpp(164,50): warning C4244: 'argument' : conversion de 'double' en 'DWORD', perte possible de données
-  display.cpp
-  Génération de code en cours
-  Previous IPDB not found, fall back to full compilation.
-  All 248 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Fin de la génération du code
-  darwin_project.vcxproj -> C:\Users\luzzi\Desktop\TRAVAIL\C++Projects\Nouveau dossier\c-game-darwin-s-project\x64\Release\darwin_project.exe
