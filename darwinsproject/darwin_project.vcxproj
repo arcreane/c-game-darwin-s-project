@@ -14,10 +14,22 @@
     <ClCompile Include="cell.cpp" />
     <ClCompile Include="darwins_project.cpp" />
     <ClCompile Include="display.cpp" />
+    <ClCompile Include="LivingElement.cpp" />
+    <ClCompile Include="Plant.cpp" />
+    <ClCompile Include="Predator.cpp" />
+    <ClCompile Include="Prey.cpp" />
+    <ClCompile Include="World.cpp" />
+    <ClCompile Include="WorldElement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cell.h" />
     <ClInclude Include="display.h" />
+    <ClInclude Include="LivingElement.h" />
+    <ClInclude Include="Plant.h" />
+    <ClInclude Include="Predator.h" />
+    <ClInclude Include="Prey.h" />
+    <ClInclude Include="World.h" />
+    <ClInclude Include="WorldElement.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

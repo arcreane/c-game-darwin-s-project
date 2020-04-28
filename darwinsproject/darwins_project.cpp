@@ -10,6 +10,91 @@ SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 void initialize_world(std::vector<std::vector<Cell>>& world, int world_width, int world_height, int nb_PLANTs, int nb_PREYs, int nb_predators, int zoom);
 
+
+
+// Rajoute des cases de type PLANTe autour des PLANTes déjà existantes
+
+void grow_PLANT(std::vector<std::vector<Cell>>& world, int x, int y, int growth_rate, int zoom)
+{
+	Cell cell = Cell(PLANT);
+	cell.done = true;
+
+	if (x > 0 and world[x - 1][y].type == PLANT and !world[x - 1][y].done)
+	{
+		if (rand() % 100 < growth_rate)
+		{
+			world[x][y] = cell;
+			show_cell(x, y, PLANT, zoom, &world[x][y]);
+		}
+	}
+
+	if (y > 0 and world[x][y - 1].type == PLANT and !world[x][y - 1].done)
+	{
+		if (rand() % 100 < growth_rate)
+		{
+			world[x][y] = cell;
+			show_cell(x, y, PLANT, zoom, &world[x][y]);
+		}
+	}
+
+	if (y < world.front().size() - 1 and world[x][y + 1].type == PLANT and !world[x][y + 1].done)
+	{
+		if (rand() % 100 < growth_rate)
+		{
+			world[x][y] = cell;
+			show_cell(x, y, PLANT, zoom, &world[x][y]);
+		}
+	}
+
+	if (x < world.size() - 1 and world[x + 1][y].type == PLANT and !world[x + 1][y].done)
+	{
+		if (rand() % 100 < growth_rate)
+		{
+			world[x][y] = cell;
+			show_cell(x, y, PLANT, zoom, &world[x][y]);
+		}
+	}
+}
+
+
+
+// Enlève la sécurité qui empèche de prendre en compte plusieurs fois le même être vivant
+
+void update_world(std::vector<std::vector<Cell>>& world)
+{
+	for (int i = 0; i < world.size(); i++)
+	{
+		for (int j = 0; j < world[0].size(); j++)
+		{
+			if (world[i][j].done == true)
+				world[i][j].done = false;
+		}
+	}
+}
+
+
+
+// Donne 1 si la valeur est positive et -1 si la valeur est négative
+
+int sign(int value)
+{
+	if (value >= 0)
+		return 1;
+
+	else
+		return -1;
+}
+
+
+
+// Indique si on peut se déplacer sur cette case
+
+int is_walkable(Type type)
+{
+	return (type == EMPTY or type == PLANT);
+}
+
+
 int main(int argc, char* argv[])
 {
 
@@ -108,18 +193,19 @@ int main(int argc, char* argv[])
 
 		if (stop)
 		{
+			//world.step();
 			for (int i = 0; i < world.size(); i++) // Boucle pour compter chaques types d'êtres vivants
 			{
 				for (int j = 0; j < world[0].size(); j++)
 				{
 					if (world[i][j].type == PLANT)
-						show_cell(i, j, PLANT, zoom, nullptr);
+						show_cell(i, j, PLANT, zoom, &world[i][j]);
 
 					if (world[i][j].type == PREY)
-						show_cell(i, j, PREY, zoom, nullptr);
+						show_cell(i, j, PREY, zoom, &world[i][j]);
 
 					if (world[i][j].type == PREDATOR)
-						show_cell(i, j, PREDATOR, zoom, nullptr);
+						show_cell(i, j, PREDATOR, zoom, &world[i][j]);
 				}
 			}
 
@@ -132,22 +218,22 @@ int main(int argc, char* argv[])
 		//if (file_.is_open())
 		//	file_ << number_PLANTs << ", " << number_PREYs << ", " << number_predators << "\n"; // Remplie de fichier data.txt
 
-		//for (int i = 0; i < world.size(); i++) // Boucle du pas de temps de la simulation
-		//{
-		//	for (int j = 0; j < world[0].size(); j++)
-		//	{
-		//		if (world[i][j].type == EMPTY)
-		//			grow_PLANT(world, i, j, growth_rate, zoom);
+		for (int i = 0; i < world.size(); i++) // Boucle du pas de temps de la simulation
+		{
+			for (int j = 0; j < world[0].size(); j++)
+			{
+				if (world[i][j].type == EMPTY)
+					grow_PLANT(world, i, j, growth_rate, zoom);
 
-		//		if (world[i][j].type == PREY and !world[i][j].done)
-		//			update_PREY(world, i, j, zoom, PREY_time_no_eat_max, PREY_nb_eat_kid, number_PLANTs);
+				/*if (world[i][j].type == PREY and !world[i][j].done)
+					update_PREY(world, i, j, zoom, PREY_time_no_eat_max, PREY_nb_eat_kid, number_PLANTs);
 
-		//		if (world[i][j].type == PREDATOR and !world[i][j].done)
-		//			update_predator(world, i, j, zoom, predator_time_no_eat_max, predator_nb_eat_kid, number_PREYs);
-		//	}
-		//}
+				if (world[i][j].type == PREDATOR and !world[i][j].done)
+					update_predator(world, i, j, zoom, predator_time_no_eat_max, predator_nb_eat_kid, number_PREYs);*/
+			}
+		}
 
-		//update_world(world);
+		update_world(world);
 
 		SDL_RenderPresent(renderer);
 
@@ -188,7 +274,7 @@ void push(int nb_pixel, int world_height, int world_width, std::vector<std::vect
 		}
 
 		world[x][y] = Cell(elem);
-		show_cell(x, y, elem, zoom, nullptr);
+		show_cell(x, y, elem, zoom, &world[x][y]);
 	}
 
 }

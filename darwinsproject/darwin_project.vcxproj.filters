@@ -18,12 +18,48 @@
     <ClCompile Include="display.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="Plant.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Predator.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Prey.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldElement.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="LivingElement.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="display.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="cell.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Plant.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Predator.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Prey.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldElement.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="LivingElement.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>

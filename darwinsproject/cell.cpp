@@ -19,10 +19,7 @@ Cell::Cell()
 
 Cell::Cell(const Cell& cell)
 {
-	type = cell.type;
-	done = cell.done;
-	nb_eat = cell.nb_eat;
-	time_no_eat = cell.time_no_eat;
+	*this = cell;
 }
 
 
@@ -35,6 +32,19 @@ Cell::Cell(Type type)
 	done = false;
 	nb_eat = 0;
 	time_no_eat = 0;
+	color = CellColor{ 0, 0, 0 };
+	switch (type)
+	{
+	case PREDATOR:
+		color.red = 255;
+		break;
+	case PREY:
+		color.blue = 255;
+		break;
+	case PLANT:
+		color.green = 255;
+		break;
+	}
 }
 
 
@@ -47,93 +57,10 @@ void Cell::operator=(const Cell& cell)
 	done = cell.done;
 	nb_eat = cell.nb_eat;
 	time_no_eat = cell.time_no_eat;
+	color = cell.color;
+	
 }
 
-
-
-
-
-// Rajoute des cases de type PLANTe autour des PLANTes déjà existantes
-
-void Cell::grow_PLANT(std::vector<std::vector<Cell>>& world, int x, int y, int growth_rate, int zoom)
-{
-	Cell cell = Cell(PLANT);
-	cell.done = true;
-
-	if (x > 0 and world[x - 1][y].type == PLANT and !world[x - 1][y].done)
-	{
-		if (rand() % 100 < growth_rate)
-		{
-			world[x][y] = cell;
-			show_cell(x, y, PLANT, zoom, this);
-		}
-	}
-
-	if (y > 0 and world[x][y - 1].type == PLANT and !world[x][y - 1].done)
-	{
-		if (rand() % 100 < growth_rate)
-		{
-			world[x][y] = cell;
-			show_cell(x, y, PLANT, zoom, this);
-		}
-	}
-
-	if (y < world.front().size() - 1 and world[x][y + 1].type == PLANT and !world[x][y + 1].done)
-	{
-		if (rand() % 100 < growth_rate)
-		{
-			world[x][y] = cell;
-			show_cell(x, y, PLANT, zoom, this);
-		}
-	}
-
-	if (x < world.size() - 1 and world[x + 1][y].type == PLANT and !world[x + 1][y].done)
-	{
-		if (rand() % 100 < growth_rate)
-		{
-			world[x][y] = cell;
-			show_cell(x, y, PLANT, zoom, this);
-		}
-	}
-}
-
-
-
-// Enlève la sécurité qui empèche de prendre en compte plusieurs fois le même être vivant
-
-void Cell::update_world(std::vector<std::vector<Cell>>& world)
-{
-	for (int i = 0; i < world.size(); i++)
-	{
-		for (int j = 0; j < world[0].size(); j++)
-		{
-			if (world[i][j].done == true)
-				world[i][j].done = false;
-		}
-	}
-}
-
-
-
-// Donne 1 si la valeur est positive et -1 si la valeur est négative
-
-int Cell::sign(int value)
-{
-	if (value >= 0)
-		return 1;
-
-	else
-		return -1;
-}
-
-
-
-// Indique si on peut se déplacer sur cette case
-
-int Cell::is_walkable(Type type)
-{
-	return (type == EMPTY or type == PLANT);
-}
 
 
 
